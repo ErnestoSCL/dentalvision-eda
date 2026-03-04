@@ -244,7 +244,8 @@ elif page == "🔬 Propiedades de Imagen":
                         x=xr, y=kde(xr),
                         name=CLASS_NAMES[cls],
                         line=dict(color=CLASS_COLORS[cls], width=2.5),
-                        fill="tozeroy", fillcolor=CLASS_COLORS[cls].replace("#", "rgba(") + ",0.07)",
+                        fill="tozeroy",
+                        fillcolor=CLASS_COLORS[cls].replace("#", "rgba(") + ",0.07)" if not CLASS_COLORS[cls].startswith("rgba") else CLASS_COLORS[cls],
                     ))
             fig.update_layout(**PLOTLY_LAYOUT, title=f"KDE — {title}",
                               xaxis_title=title, yaxis_title="Densidad")
@@ -441,7 +442,7 @@ elif page == "🖼️ Galería de Imágenes":
         cols = st.columns(min(n_imgs, 4))
         for i, img in enumerate(images):
             col = cols[i % len(cols)]
-            col.image(img, use_column_width=True,
+            col.image(img, use_container_width=True,
                       caption=f"Muestra {i+1} · {img.width}×{img.height}")
 
     st.markdown("---")
