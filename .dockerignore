@@ -1,0 +1,30 @@
+# Entornos virtuales y caché
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Notebooks (no necesarios en producción)
+*.ipynb
+.ipynb_checkpoints/
+
+# Git
+.git/
+.gitignore
+
+# Artefactos del EDA
+eda_dashboard.png
+
+# Variables de entorno
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
