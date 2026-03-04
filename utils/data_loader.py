@@ -53,7 +53,7 @@ def _stats_for_row(row) -> dict | None:
 
 
 # ─── Funciones cacheadas ───────────────────────────────────────────────────
-@st.cache_data(show_spinner="Cargando datasets…")
+@st.cache_resource(show_spinner="Cargando datasets…")
 def load_dataframes():
     """Carga train y test desde parquet."""
     df_train = pd.read_parquet(TRAIN_PATH)
@@ -61,7 +61,7 @@ def load_dataframes():
     return df_train, df_test
 
 
-@st.cache_data(show_spinner="Calculando estadísticas de imágenes (primera vez: ~3 min)…")
+@st.cache_resource(show_spinner="Calculando estadísticas de imágenes (primera vez: ~3 min)…")
 def compute_stats(df_train: pd.DataFrame, df_test: pd.DataFrame):
     """Extrae estadísticas por imagen. Se cachea para no recalcular."""
     def _extract(df):
@@ -76,7 +76,7 @@ def compute_stats(df_train: pd.DataFrame, df_test: pd.DataFrame):
     return _extract(df_train), _extract(df_test)
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_resource(show_spinner=False)
 def get_sample_images(df: pd.DataFrame, cls: int, n: int = 5, seed: int = 42):
     """Devuelve n imágenes PIL de la clase dada."""
     subset = df[df["label"] == cls]
