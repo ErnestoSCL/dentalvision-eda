@@ -175,7 +175,7 @@ if page == "🏠 Inicio":
         )
         fig.update_layout(**PLOTLY_LAYOUT, showlegend=True)
         fig.update_traces(textinfo="percent+label", textfont_color="#cdd6f4")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     # Tabla resumen
     with c2:
@@ -196,14 +196,14 @@ if page == "🏠 Inicio":
                 df_test.isnull().sum().sum(),
             ],
         })
-        st.dataframe(summary, use_container_width=True, hide_index=True)
+        st.dataframe(summary, width="stretch", hide_index=True)
 
         st.markdown("#### Distribución por Clase (Train)")
         dist = df_train["label"].value_counts().sort_index().reset_index()
         dist.columns = ["Clase", "N"]
         dist["Clase"] = dist["Clase"].map(lambda x: f"{x} — {CLASS_NAMES[x]}")
         dist["%"] = (dist["N"] / dist["N"].sum() * 100).round(1)
-        st.dataframe(dist, use_container_width=True, hide_index=True)
+        st.dataframe(dist, width="stretch", hide_index=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -232,7 +232,7 @@ elif page == "📊 Distribución de Clases":
             text_auto=True,
         )
         fig.update_layout(**PLOTLY_LAYOUT)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with tab2:
         train_pct = [
@@ -254,7 +254,7 @@ elif page == "📊 Distribución de Clases":
         fig.update_layout(**PLOTLY_LAYOUT, barmode="group",
                           title="Distribución relativa (%) Train vs Test",
                           yaxis_title="%", xaxis_title="Clase")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with tab3:
         observed = df_train["label"].value_counts().sort_index().values
@@ -305,7 +305,7 @@ elif page == "🔬 Propiedades de Imagen":
                     ))
             fig.update_layout(**PLOTLY_LAYOUT, title=f"KDE — {title}",
                               xaxis_title=title, yaxis_title="Densidad")
-            ax_col.plotly_chart(fig, use_container_width=True)
+            ax_col.plotly_chart(fig, width="stretch")
 
         # Boxplots
         fig = go.Figure()
@@ -317,7 +317,7 @@ elif page == "🔬 Propiedades de Imagen":
                 boxmean=True,
             ))
         fig.update_layout(**PLOTLY_LAYOUT, title="Boxplot — Brillo por Clase")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with tab2:
         c1, c2 = st.columns(2)
@@ -330,7 +330,7 @@ elif page == "🔬 Propiedades de Imagen":
                 labels={"color": "Clase"},
             )
             fig.update_layout(**PLOTLY_LAYOUT)
-            col.plotly_chart(fig, use_container_width=True)
+            col.plotly_chart(fig, width="stretch")
 
     with tab3:
         fig = make_subplots(rows=1, cols=3,
@@ -349,7 +349,7 @@ elif page == "🔬 Propiedades de Imagen":
                         showlegend=(ci == 1),
                     ), row=1, col=ci)
         fig.update_layout(**PLOTLY_LAYOUT, title="Distribución RGB por Clase", height=400)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
         # Heatmap medias RGB
         rgb_means = df_train_stats.groupby("label")[["mean_r","mean_g","mean_b"]].mean().round(1)
@@ -361,7 +361,7 @@ elif page == "🔬 Propiedades de Imagen":
             title="Media RGB por Clase",
         )
         fig_hm.update_layout(**PLOTLY_LAYOUT)
-        st.plotly_chart(fig_hm, use_container_width=True)
+        st.plotly_chart(fig_hm, width="stretch")
 
     with tab4:
         corr_cols = [c for c in
@@ -375,14 +375,14 @@ elif page == "🔬 Propiedades de Imagen":
             aspect="auto",
         )
         fig.update_layout(**PLOTLY_LAYOUT)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
         if "label" in corr.columns:
             st.markdown("#### Correlación con la etiqueta")
             top = corr["label"].drop("label").abs().sort_values(ascending=False).reset_index()
             top.columns = ["Propiedad", "|r| con Label"]
             top["|r| con Label"] = top["|r| con Label"].round(3)
-            st.dataframe(top, use_container_width=True, hide_index=True)
+            st.dataframe(top, width="stretch", hide_index=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -440,7 +440,7 @@ elif page == "🔍 Calidad de Datos":
             text_auto=".1f",
         )
         fig.update_layout(**PLOTLY_LAYOUT)
-        c1.plotly_chart(fig, use_container_width=True)
+        c1.plotly_chart(fig, width="stretch")
 
         # Duplicados por clase
         if len(dup_train) > 0:
@@ -454,14 +454,14 @@ elif page == "🔍 Calidad de Datos":
                 text_auto=True,
             )
             fig2.update_layout(**PLOTLY_LAYOUT)
-            c2.plotly_chart(fig2, use_container_width=True)
+            c2.plotly_chart(fig2, width="stretch")
 
     with tab2:
         out_df = pd.DataFrame(
             [(k, v, round(v/len(df_train_stats)*100, 1)) for k, v in outlier_report.items()],
             columns=["Propiedad", "N Outliers", "% del total"],
         )
-        st.dataframe(out_df, use_container_width=True, hide_index=True)
+        st.dataframe(out_df, width="stretch", hide_index=True)
 
         fig = go.Figure()
         for cls in range(4):
@@ -473,7 +473,7 @@ elif page == "🔍 Calidad de Datos":
                 jitter=0.3,
             ))
         fig.update_layout(**PLOTLY_LAYOUT, title="Outliers de Brillo por Clase (Train)")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -523,4 +523,4 @@ elif page == "🖼️ Galería de Imágenes":
             xaxis_title="Intensidad (0-255)",
             yaxis_title="Frecuencia",
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
