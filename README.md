@@ -11,6 +11,8 @@
 > **Interactive EDA dashboard** for a dental image classification dataset (4 classes: Prosthesis · Healthy · Cavity · Other).  
 > Built with **Streamlit + Plotly**, deployable on **Hugging Face Spaces** via Docker.
 
+### 🌐 [Live Demo: dentalvision-eda.streamlit.app](https://dentalvision-eda.streamlit.app/)
+
 ---
 
 ## 📸 Dashboard Preview
