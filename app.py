@@ -11,6 +11,14 @@ from plotly.subplots import make_subplots
 import streamlit as st
 from scipy import stats
 
+def hex_to_rgba(hex_color: str, alpha: float = 1.0) -> str:
+    """Convierte un color HEX (#RRGGBB) a cadena 'rgba(r, g, b, a)' para Plotly."""
+    hex_color = hex_color.lstrip('#')
+    if len(hex_color) == 6:
+        r, g, b = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+        return f"rgba({r}, {g}, {b}, {alpha})"
+    return hex_color
+
 from utils.data_loader import (
     CLASS_COLORS,
     CLASS_NAMES,
@@ -27,28 +35,76 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ─── CSS personalizado ─────────────────────────────────────────────────────
+# ─── CSS personalizado y UI ────────────────────────────────────────────────
 st.markdown("""
 <style>
-  [data-testid="stAppViewContainer"] { background: #1e1e2e; }
-  [data-testid="stSidebar"]          { background: #181825; }
-  h1, h2, h3, h4                     { color: #cdd6f4; }
-  .metric-card {
-    background: #313244; border-radius: 12px;
-    padding: 1rem 1.5rem; text-align: center;
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+  
+  html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif;
   }
-  .metric-card .value { font-size: 2rem; font-weight: 700; color: #89b4fa; }
-  .metric-card .label { font-size: 0.85rem; color: #a6adc8; margin-top: 4px; }
-  div[data-testid="stMetricValue"]   { color: #89b4fa; }
+  
+  /* Fondos y contenedores principales */
+  [data-testid="stAppViewContainer"] { 
+    background: linear-gradient(180deg, #11111b 0%, #1e1e2e 100%); 
+  }
+  [data-testid="stSidebar"] { 
+    background-color: rgba(24, 24, 37, 0.95) !important;
+    border-right: 1px solid #313244;
+  }
+  
+  /* Encabezados y textos */
+  h1, h2, h3, h4 { 
+    color: #cdd6f4; 
+    font-weight: 700;
+  }
+  hr {
+      border-color: rgba(255,255,255, 0.05);
+  }
+  
+  /* Tarjetas de Métricas */
+  .metric-card {
+    background: rgba(49, 50, 68, 0.4); 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 1.5rem; 
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .metric-card .value { 
+    font-size: 2.2rem; 
+    font-weight: 800; 
+  }
+  .metric-card .label { 
+    font-size: 0.9rem; 
+    color: #a6adc8; 
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Tabs UI */
+  button[data-baseweb="tab"] p {
+      font-size: 1rem;
+      font-weight: 600;
+  }
 </style>
 """, unsafe_allow_html=True)
 
 PLOTLY_LAYOUT = dict(
-    paper_bgcolor="#1e1e2e",
-    plot_bgcolor="#181825",
+    paper_bgcolor="rgba(0,0,0,0)",
+    plot_bgcolor="rgba(0,0,0,0)",
     font_color="#cdd6f4",
-    xaxis=dict(gridcolor="#313244"),
-    yaxis=dict(gridcolor="#313244"),
+    font_family="'Inter', sans-serif",
+    xaxis=dict(gridcolor="rgba(255,255,255,0.05)", zerolinecolor="rgba(255,255,255,0.1)"),
+    yaxis=dict(gridcolor="rgba(255,255,255,0.05)", zerolinecolor="rgba(255,255,255,0.1)"),
+    margin=dict(l=20, r=20, t=50, b=20)
 )
 
 
@@ -245,7 +301,7 @@ elif page == "🔬 Propiedades de Imagen":
                         name=CLASS_NAMES[cls],
                         line=dict(color=CLASS_COLORS[cls], width=2.5),
                         fill="tozeroy",
-                        fillcolor=CLASS_COLORS[cls].replace("#", "rgba(") + ",0.07)" if not CLASS_COLORS[cls].startswith("rgba") else CLASS_COLORS[cls],
+                        fillcolor=hex_to_rgba(CLASS_COLORS[cls], 0.1),
                     ))
             fig.update_layout(**PLOTLY_LAYOUT, title=f"KDE — {title}",
                               xaxis_title=title, yaxis_title="Densidad")
