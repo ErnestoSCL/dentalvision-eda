@@ -498,7 +498,7 @@ elif page == "🖼️ Galería de Imágenes":
         cols = st.columns(min(n_imgs, 4))
         for i, img in enumerate(images):
             col = cols[i % len(cols)]
-            col.image(img, use_container_width=True,
+            col.image(img, width="stretch",
                       caption=f"Muestra {i+1} · {img.width}×{img.height}")
 
     st.markdown("---")

@@ -62,7 +62,7 @@ def load_dataframes():
 
 
 @st.cache_resource(show_spinner="Calculando estadísticas de imágenes (primera vez: ~3 min)…")
-def compute_stats(df_train: pd.DataFrame, df_test: pd.DataFrame):
+def compute_stats(_df_train: pd.DataFrame, _df_test: pd.DataFrame):
     """Extrae estadísticas por imagen. Se cachea para no recalcular."""
     def _extract(df):
         records = df.apply(_stats_for_row, axis=1).dropna()
@@ -73,13 +73,13 @@ def compute_stats(df_train: pd.DataFrame, df_test: pd.DataFrame):
             stats["path"]  = df["path"].values[:  len(stats)]
         return stats
 
-    return _extract(df_train), _extract(df_test)
+    return _extract(_df_train), _extract(_df_test)
 
 
 @st.cache_resource(show_spinner=False)
-def get_sample_images(df: pd.DataFrame, cls: int, n: int = 5, seed: int = 42):
+def get_sample_images(_df: pd.DataFrame, cls: int, n: int = 5, seed: int = 42):
     """Devuelve n imágenes PIL de la clase dada."""
-    subset = df[df["label"] == cls]
+    subset = _df[_df["label"] == cls]
     sample = subset.sample(min(n, len(subset)), random_state=seed)
     images = []
     for _, row in sample.iterrows():
