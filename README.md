@@ -119,4 +119,4 @@ dentalvision-eda/
 
 ## 📄 Licencia
 
-MIT © 2026 [ErnestoSCL](https://github.com/ErnestoSCL)
+MIT © 2026 [ErnestoSCL](https://github.com/ErnestoSCL).
